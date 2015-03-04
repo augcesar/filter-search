@@ -1,0 +1,26 @@
+= simple_form_for(:search, method: :get, html: { data: { "route-model" => router_model }, class: 'hidden-print form-horizontal col-lg-12 well well-sm form-search', role: 'form' }) do |f|
+  %i.glyphicon.glyphicon-search.btn-search
+  Filtros para busca
+  %br
+  %br
+  - if defined?(parametros_ocultos) == "local-variable"
+    - parametros_ocultos.each do |k, v|
+      = f.input k, input_html: {value: v}, as: :hidden
+  - if defined?(parametros_ocultos_tag) == "local-variable"
+    - parametros_ocultos_tag.each do |k, v|
+      = hidden_field_tag k, v
+
+  - filter_search.populacao.each do |campo|
+    .form-group.params
+      %label.col-sm-1.control-label.force-text-left{:for => "", style:'white-space: nowrap;margin-right: 5px;'}  Buscar por:
+      .col-sm-2
+        = f.input :coluna, collection: filter_search.parametro, label: false, selected: campo["key"], input_html: { class: 'select2' }
+      .col-sm-5
+        = f.input :valor, as: :string,  label: false, input_html: {value: campo["value"]}, include_blank: true
+      .col-sm-1
+        = filter_search_button_help campo
+  
+  .form-group    
+    .col-sm-2
+      = f.button :submit, value: 'Buscar', class: 'btn btn-primary'
+    
